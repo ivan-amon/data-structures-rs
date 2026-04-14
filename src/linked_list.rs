@@ -11,10 +11,12 @@ pub struct LinkedList<T> {
 impl<T> LinkedList<T> {
 
     pub fn new() -> Self {
-        LinkedList { head: None, size: 0 }
+        Self { head: None, size: 0 }
     }
 
     pub fn size(&self) -> usize { self.size }
+
+    pub fn is_empty(&self) -> bool { self.size == 0 }
 
     pub fn push(&mut self, value: T) { // O(1)
         let old = self.head.take();
