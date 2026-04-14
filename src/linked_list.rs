@@ -9,23 +9,42 @@ pub struct LinkedList<T> {
 }
 
 impl<T> LinkedList<T> {
-
+    
     pub fn new() -> Self {
-        Self { head: None, size: 0 }
+        Self {
+            head: None,
+            size: 0,
+        }
     }
 
-    pub fn size(&self) -> usize { self.size }
+    pub fn size(&self) -> usize {
+        self.size
+    }
 
-    pub fn is_empty(&self) -> bool { self.size == 0 }
+    pub fn is_empty(&self) -> bool {
+        self.size == 0
+    }
 
-    pub fn push(&mut self, value: T) { // O(1)
+    pub fn add_first(&mut self, value: T) { // O(1)
         let old = self.head.take();
-        let new_node = Node {
-            value,
-            next: old,
-        };
+        let new_node = Node { value, next: old };
         self.head = Some(Box::new(new_node));
         self.size += 1;
+    }
+
+    pub fn push(&mut self, value: T) { // O(n)
+        let mut current = &mut self.head;
+        loop {
+            match current {
+                Some(node) => current = &mut node.next,
+                None => {
+                    let new_node = Node { value, next: None };
+                    *current = Some(Box::new(new_node));
+                    self.size += 1;
+                    return;
+                }
+            }
+        }
     }
 
     pub fn pop(&mut self) -> Option<T> { // O(1)
@@ -36,7 +55,7 @@ impl<T> LinkedList<T> {
                 self.head = old.next;
                 self.size -= 1;
                 Some(popped)
-            },
+            }
             None => None,
         }
     }
